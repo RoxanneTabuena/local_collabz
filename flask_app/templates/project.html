@@ -1,0 +1,239 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/project_script.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+<div class="content">
+<!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="buddies center">
+        {% for message in messages%}
+        <p class="tiny"><em><strong>{{ message }}</strong></em></p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+<!-- END FLASH MESSAGES -->
+<!-- UPDATES -->
+    {% if project.news: %}
+    <div class="sect">
+        <p class="title">updates:</p>
+        <div class="puny">
+            <!-- accepted -->
+            {% for message in notifications: %}
+            <form action="/dismiss/projectpage/{{ message.id }}" method="post">
+                <input type="hidden" name="project" value="{{ project.id }}">
+                <div class="sect">
+                    <button class="plain puny_butt thic" type="submit">X</button>
+                    <p class="puny b_txt_highlight">{{ message.notification }}</p>
+                </div>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+<!-- END UPDATES -->
+<!-- EDIT BUTTON -->
+    {% if user.id in project.organizers: %}
+    <div class="sect">
+    <a href="/project/edit/{{ project.id }}" class="btn_flip l p_highlight thic ontop">Edit</a>
+    {% endif %}
+<!-- END EDIT BUTTON -->
+<!-- SEND MESSAGE -->
+    <div class="alert" id="new_message">
+        <div class="snapshot b_highlight">
+            <p class="puny thic b_txt_highlight bigclose" onclick="nevermind(0), nevermind(1), show(1)">x</p>
+            <form action="/new_project_chat/{{ project.id }}" method="post">
+                <div class="buddies_left">
+                    <p class="thic tiny">&nbspmessage to:</p>
+                    <p class="tiny thic">&nbsp{{ project.title }} organizers</p>
+                    <input type="text" name="title" placeholder="subject" class="tiny">
+                    <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="tiny" name="message" cols="25" rows="3"placeholder="direct message"></textarea>
+                    <button type="submit" class="tiny_butt btn thic close">send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<!-- END SEND MESSAGE -->
+<!-- STATUS & TYPE DISPLAY -->
+    <div class="pals space">
+        <div class="center">
+            <p class="info thic">status:</p>
+            <p class="puny_butt btn">{{ project.status }}</p>
+        </div>
+        <p><strong>{{ project.title }}</strong></p>
+        <div class="center">
+            <p class="info thic">type:</p>
+            <p class="puny_butt btn">{{ project.type }}</p>
+        </div>
+    </div>
+<!-- END STATUS & TYPE DISPLAY -->
+<!-- BASICINFO -->
+    <div class="mish center thin">
+        <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="quotes open">
+        <p class="sm">{{ project.mission }}</p>
+        <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="quotes close">
+    </div>
+<!-- END BASICINFO -->
+<!-- CURRENT TEAM -->
+    <div class="div">
+        {% if user.on_project == True: %}
+        <div class="sect">
+            <p class="sect_title">current team:&nbsp</p>
+            <div class="pals space">
+                {% for person in project.team: %}
+                {% if person.id == user.id %}
+                <div class="sm_snap">
+                    <div class="buddies center">
+                        <a href="/profile/{{ person.id }}" class="puny subtle_btn_blk">{{ person.alias }}</a>
+                        {% for role in person.roles: %}
+                        <p class="open puny thic">{{ role.title }}</p>
+                        <p class="tiny soft left">{{ role.description }}</p>
+                        <a href="/verify/withdraw/{{ role.id }}/{{ project.id }}" class="puny plain soft thic"> withdaw</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% if person.id != user.id %}
+                <div class="sm_snap">
+                    <div class="buddies center">
+                        <a href="/profile/{{ person.id }}" class="puny subtle_btn_blk">{{ person.alias }}</a>
+                        {% for role in person.roles: %}
+                        <p class="open puny thic">{{ role.title }}</p>
+                        <p class="tiny soft left">{{ role.description }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="sect">
+            <p class="sect_title">current team:&nbsp</p>
+            <div class="pals space">
+                {% for person in project.team: %}
+                <div class="sm_snap">
+                    <div class="buddies center">
+                        <a href="/profile/{{ person.id }}" class="puny subtle_btn_blk">{{ person.alias }}</a>
+                        {% for role in person.roles: %}
+                        <p class="open puny thic">{{ role.title }}</p>
+                        <p class="tiny soft left">{{ role.description }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+<!-- END CURRENT TEAM -->
+<!-- NEEDED ROLES -->
+    {% if project.needed_roles: %}
+    <div>
+        <p class="sect_title">needed collaborators:</p>
+        <div class="pals space">
+            {% for role in project.needed_roles: %}
+            <div class="sm_snap">
+                <div class="buddies left">
+                    <p class="subtle_btn_blk puny">{{ role.title }}</p>
+                    <p class="tiny soft">{{ role.description }}</p>
+                    <p class="puny thic">skills needed:</p>
+                    <div class="sect">
+                        {% for skill in role.skillset: %}
+                            <a href="/people/skills/{{ skill.id }}" class="puny_butt btn">{{ skill.skill }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if role.offered: %}
+                <p class="puny txt_highlight thic r">offer sent<3</p>
+                {% else: %}
+                <form action="/volunteer/{{ project.id }}" method="post">
+                    <input type="hidden" name="project" value="{{ project.title }}">
+                    <input type="hidden" name="role_id" value="{{ role.id }}">
+                    <input type="hidden" name="role" value="{{ role.title }}">
+                    <button class="puny plain txt_highlight thic r"> volunteer</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+<!--END NEEDED ROLES  -->
+<!-- ABOUT PROJECT -->
+    {% if project.about: %}
+    <div id="about">
+        <p class="sect_title">about project:</p>
+        <div class="tiny center">
+                {% for string in project.aboutfmat: %}
+                <p>{{ string }}</p>
+                <br>
+                {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+<!-- END ABOUT PROJECT -->
+    </div>
+{% if user.on_project == True: %}
+<!-- PROJECT CHAT -->
+<div class="fix_icons actions close r">
+    <a href="/conversation/project/{{project.id}}" class="icon"><img src="{{ url_for('static',filename='img/icons/message.png')}}" alt="message icon" class="lg_icon_pic"></a>
+</div>
+<!-- END PROJECT CHAT -->
+{% else: %}
+<!-- LIKE&WATCH -->
+<div class="fix_icons actions close r ">
+    <p class="icon" id="message" onclick="display(0), display(1), hide(1)"><img src="{{ url_for('static',filename='img/icons/message.png')}}" alt="message icon" class="lg_icon_pic"></p>
+    <p class="icon" id="messaged"><img src="{{ url_for('static',filename='img/icons/messaged.png')}}" alt="message icon" class="lg_icon_pic"></p>
+    {% if project.liked != True: %}
+    <form action="/project/like/{{ project.id }}" method="post">
+        <button type="submit" class="icon"><img id="likey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/like.png')}}" alt="like icon"></button>
+    </form>
+    {% else %}
+    <form action="/project/unlike/{{ project.id }}" method="post">
+        <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/liked.png')}}" alt="like icon"></button>
+    </form>
+    {% endif %}
+    {% if project.watched != True: %}
+    <form action="/project/watch/{{ project.id }}" method="post">
+        <button type="submit" class="icon"><img id="watchey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watch.png')}}" alt="watch icon"></button>
+    </form>
+    {% else %}
+    <form action="/project/unwatch/{{ project.id }}" method="post">
+        <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watching.png')}}" alt="watch icon"></button>
+    </form>
+    {% endif %}
+</div>
+<!-- END LIKE&WATCH -->
+{% endif %}
+

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/people_script.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+    <div class="content">
+        <div class="pals space slim">
+            <a href="/watchlist/projects/{{ user.id }}">projects</a>
+            <a href="/watchlist/people/{{ user.id }}" class="thic">people</a>
+        </div>
+        {% if not people: %}
+        <div class="buddies center">
+            <p>Watchlist empty</p>
+            <a href="/people" class="thic">Browse People</a>
+        </div>
+        {% endif %}
+        {% for person in people: %}
+        <button class="snapshot" onclick="window.location.href='/profile/{{ person.id }}'">
+            <p class="center"><strong>{{ person.alias }}</strong></p>
+            {% if person.city_id: %}
+                <p class="center thic sm">{{ person.location.city }},{{ person.location.area }}</p>
+            {% endif %}
+            {% if person.mission %}
+            <p class="mish center">
+                <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="open quotes">
+            {% if person.mission: %}
+                {{person.mission}}
+            {% else: %}
+                This person hasn't shared their mission yet.
+            {% endif %}
+                <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="close quotes">
+            </p>
+            {% endif %}
+            {% if person.skillset != 'No_Skillz': %}
+            <div class="sect left">
+                <p class="title tiny">skills:</p>
+                {% for skill in person.skillset: %}
+                <p class="soft puny thic">{{ skill.skill }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if person.associated_projects: %}
+            <div class="sect tiny left">
+                <p class="title">associated projects:</p>
+                {% for project in person.associated_projects: %}
+                <div class="buddies">
+                    <div class="sect soft">
+                        <p class="title"><strong>{{ project.title }}</strong></p><p>,{{ project.role.title }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </button>
+        <div class="icons actions close r">
+            {% if person.liked != True: %}
+            <form action="/profile/like/{{ person.id }}" method="post">
+                <button type="submit" class="icon"><img id="likey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/like.png')}}" alt="like icon"></button>
+            </form>
+            {% else %}
+            <form action="/profile/unlike/{{ person.id }}" method="post">
+                <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/liked.png')}}" alt="like icon"></button>
+            </form>
+            {% endif %}
+            {% if person.watched != True: %}
+            <form action="/profile/watch/{{ person.id }}" method="post">
+                <button type="submit" class="icon"><img id="watchey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watch.png')}}" alt="watch icon"></button>
+            </form>
+            {% else %}
+            <form action="/profile/unwatch/{{ person.id }}" method="post">
+                <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watching.png')}}" alt="watch icon"></button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

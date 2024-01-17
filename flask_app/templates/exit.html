@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <title>Document</title>
+    </head>
+    <body>
+    <div class="content mids">
+        <div class="snapshot">
+
+            <form action="/exit_chat/{{  conversation.id }}" method="post">
+                <p class="center">Are you sure you want to exit {{ conversation.title }}?</p>
+                <div class="pals_mid mspace big_top big_bottom">
+                    <a class="thic" href="/conversation/{{ conversation.id }}">no</a>
+                    <button type="submit" class="thic plain">yes</button>
+                </div>
+                <p class="center">You wont be able to reenter chat unless someone else adds you</p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

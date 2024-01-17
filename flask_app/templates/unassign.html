@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <title>Document</title>
+    </head>
+    <body>
+    <div class="content mids">
+        {% if user.organized_project == True and role.title == 'organizer': %}
+            {% if remove == True: %}
+            <form action="/unassign/organizer/remove/{{ project.id }}" method="post">
+                <p class="center">Are you sure you want to remove {{ user.alias }} as an organizer for {{ project.title }}?</p>
+                <p class="center">This would remove them from the project completely.</p>
+                <input type="hidden" name="role_id" value="{{ role.id }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <div class="pals_mid mspace">
+                    <a class="thic" href="/project/edit/{{ project.id }}">no</a>
+                    <button type="submit" class="thic plain">yes</button>
+                </div>
+            </form>
+            {% else: %}
+            <form action="/unassign/organizer/{{ project.id }}" method="post">
+                <p class="center">Are you sure you want to remove {{ user.alias }} as an organizer for {{ project.title }}?</p>
+                <input type="hidden" name="role_id" value="{{ role.id }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <div class="pals_mid mspace">
+                    <a class="thic" href="/project/edit/{{ project.id }}">no</a>
+                    <button type="submit" class="thic plain">yes</button>
+                </div>
+            </form>
+            {% endif %}
+        {% else %}
+            {% if remove == True: %}
+            <form action="/unassign/remove/{{ project.id }}" method="post">
+                <p class="center">Are you sure you want to unassign {{ user.alias }} from {{ role.title }}?</p>
+                <p class="center">This would remove them from the project completely.</p>
+                <input type="hidden" name="role_id" value="{{ role.id }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <div class="pals_mid mspace">
+                    <a class="thic" href="/project/edit/{{ project.id }}">no</a>
+                    <button type="submit" class="thic plain">yes</button>
+                </div>
+            </form>
+            {% else: %}
+            <form action="/unassign/{{ project.id }}" method="post">
+                <p class="center">Are you sure you want to unassign {{ user.alias }} from {{ role.title }}?</p>
+                <input type="hidden" name="role_id" value="{{ role.id }}">
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+                <div class="pals_mid mspace">
+                    <a class="thic" href="/project/edit/{{ project.id }}">no</a>
+                    <button type="submit" class="thic plain">yes</button>
+                </div>
+            </form>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

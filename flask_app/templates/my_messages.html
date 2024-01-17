@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/my_messages.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+<!-- NAV -->
+<div class="nav w3-bar w3-black">
+    <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+    <div class="w3-dropdown-hover">
+        <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+            <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+            <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+        </div>
+    </div>
+    <div class="w3-dropdown-hover">
+        <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+            <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+            <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+            <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+        </div>
+    </div>
+</div>
+<!-- ENDNAV -->
+<div class="content">
+<!-- SEND OPTION -->
+    {% if watched_people: %}
+    <div id="new" class="snapshot_thin" onclick="display(0), hide(0)">
+        <p class="thic tiny center">+ send a new message</p>
+    </div>
+<!-- END SEND OPTION -->
+<!-- SEND MESSAGE -->
+    <div class="snapshot b_highlight" id="send">
+        <form action="/create_chat" method="post">
+            <div class="center">
+                <p class="puny thic close" onclick="nevermind(0), show(0)">x</p>
+                <p class="thic tiny">New Message for:</p>
+                <select class="tiny" name="user_id">
+                    {% for person in watched_people: %}
+                    <option value="{{ person.id }}">{{ person.alias }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="buddies_left">
+                <input type="text" name="title" placeholder="subject" class="tiny">
+                <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="tiny" name="message" cols="45" rows="3"placeholder="direct message"></textarea>
+                <button type="submit" class="tiny_butt btn thic close">send</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+<!-- END SEND MESSAGE -->
+<!-- MESSAGES -->
+{% for chat in conversations: %}
+    {% if chat.visited == False: %}
+    <div class="snapshot center b_highlight" onclick="window.location.href='/conversation/{{ chat.id }}'">
+        <p class="sm thic">{{ chat.title }}</p>
+        <p class="puny"><em>new messages!</em></p>
+        <div class="pals tiny">
+            {% for member in chat.members: %}
+                {% if member.id != user.id: %}
+            <a href="/profile/{{ member.id }}" class="btn tiny_butt">{{ member.alias }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% else: %}
+    <div class="snapshot center" onclick="window.location.href='/conversation/{{ chat.id }}'">
+        <p class="sm thic">{{ chat.title }}</p>
+        <div class="pals tiny">
+            {% for member in chat.members: %}
+                {% if member.id != user.id: %}
+            <a href="/profile/{{ member.id }}" class="btn tiny_butt">{{ member.alias }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endfor %}
+<!-- END MESSAGES -->
+</div>

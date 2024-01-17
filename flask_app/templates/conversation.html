@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/conversation_script.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+<div class="content">
+    <div class="pals space">
+        <a href="/messages/{{user.id}}" class="thic tiny">back to messages</a>
+        <a href="/conversation/{{ conversation.id }}/exit" class="thic tiny">x</a>
+    </div>
+    <div class="center" id="title">
+        <p class="center thic">{{ conversation.title }}</p>
+        <p class="subtle_btn puny center" onclick="display(0), hide(0)">change title</p>
+    </div>
+    <div id="change_title" class="buddies">
+        <form action="/change_title/{{ conversation.id }}" method="post">
+            <div class="pals_mid space">
+                <input type="text" name="title" value="{{ conversation.title }}" class="center puny thic">
+                <button type="submit" class="puny_butt btn thic">save</button>
+            </div>
+        </form>
+        <p class="subtle_btn puny center" onclick="reveal(0), nevermind(0)">change title</p>
+    </div>
+    <div class="pals tiny">
+        <p class="sm thic">members:</p>
+        {% for member in members: %}
+        <a href="/profile/{{member.id}}" class="btn thic">{{ member.alias }}</a>
+        {% endfor %}
+        <p class="btn thic" onclick="display(1)">+</p>
+    </div>
+    <div class="snapshot thin" id="invite">
+        <div class="pals_mid space tiny">
+            <p class="thic">add to chat:</p>
+            <form action="/add_2_chat/{{ conversation.id }}" method="post">
+                <select name="user_id">
+                    {% for person in user.watchlist %}
+                    <option value="{{ person.id }}">{{ person.alias }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="puny_butt btn thic">add</button>
+            </form>
+        </div>
+    </div>
+    <div class="chat">
+        {% for message in messages: %}
+            {% if message.alias == user.alias: %}
+            <div class="msg_me">
+                <p class="tiny msg_c_me">{{ message.message }}</p>
+                <p class=" msg_u">me</p>
+            </div>
+            {% else: %}
+            <div class="msg">
+                <p class=" msg_u">{{ message.alias }}</p>
+                <p class="tiny msg_c">{{ message.message }}</p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="snapshot">
+        <form action="/new_message/{{ conversation.id }}" method="post">
+            <div class="buddies">
+                <textarea name="message" cols="35" rows="1" placeholder="add to the coversation" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"'></textarea>
+                <button type="submit" class="tiny_butt btn thic close">send</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+

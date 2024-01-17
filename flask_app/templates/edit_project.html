@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/edit_project.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+<!-- NAV -->
+<div class="nav w3-bar w3-black">
+    <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+    <div class="w3-dropdown-hover">
+        <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+            <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+            <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+        </div>
+    </div>
+    <div class="w3-dropdown-hover">
+        <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+            <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+            <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+            <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+        </div>
+    </div>
+</div>
+<!-- END NAV -->
+<div class="content">
+<!-- FLASH MESSAGES -->
+    <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="buddies center">
+            {% for message in messages%}
+            <p class="tiny"><em><strong>{{ message }}</strong></em></p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+<!-- END FLASH MESSAGES -->
+    <p class="pg_title soft"><strong>Project Command</strong></p>
+<!-- STATUS & TYPE DISPLAY -->
+    <div class="pals space">
+        <div class="center">
+            <p class="info thic">status:</p>
+            <p class="puny_butt btn">{{ project.status }}</p>
+            <p class="puny soft thic" onclick="display(0)">update status</p>
+        </div>
+        <div class="center">
+            <p class="info thic">type:</p>
+            <p class="puny_butt btn">{{ project.type }}</p>
+            <p class="puny soft thic" onclick="display(1)"> update type</p>
+        </div>
+    </div>
+<!-- END STATUS & TYPE DISPLAY -->
+    <!-- <p class="center"><strong>Project Command</strong></p> -->
+<!-- BASICINFO -->
+    <div class="center">
+        <form action="/update_project/{{ project.id }}" method="post">
+            <input type="hidden" name="project_id" value="{{ project.id }}">
+            <input type="text" name="title" value="{{ project.title }}">
+            <div class="mish">
+                <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="quotes bigopen">
+                <textarea name="mission" cols="30" rows="5">{{ project.mission }}</textarea>
+                <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="quotes bigclose">
+            </div>
+            <button class="btn bigclose tiny" type="submit">save</button>
+        </form>
+    </div>
+<!-- END BASICINFO -->
+<!-- TOGGLE PUBLIC -->
+    <div class="pals space">
+        <div class="center">
+        {% if project.is_public == 'no': %}
+            <div class="pals_mid">
+                <p class="tiny thic">private mode:</p>
+                <form action="/make_public/{{ project.id }}" method="post">
+                    <button type="submit" class ="tiny soft plain thic">make public</button>
+                </form>
+            </div>
+            <p class="tiny">viewable by project team</p>
+        {% else: %}
+            <div class="pals_mid">
+                <p class="tiny thic">public mode:</p>
+                <form action="/make_private/{{ project.id }}" method="post">
+                    <button type="submit" class ="tiny soft plain thic">make private</button>
+                </form>
+            </div>
+            <p class="tiny">viewable by Collabz members</p>
+        {% endif %}
+        </div>
+        <div class="center pals">
+            {% if project.is_recruiting == 'no': %}
+            <div class="pals_mid">
+                <p class="tiny thic">recruiting off:</p>
+                <form action="/recruit/{{ project.id }}" method="post">
+                    <button type="submit" class ="tiny soft plain thic">turn on</button>
+                </form>
+            </div>
+            <p class="tiny">not accepting volunteers</p>
+            {% else: %}
+            <div class="pals_mid">
+                <p class="tiny thic">recruiting on:</p>
+                <form action="/dont_recruit/{{ project.id }}" method="post">
+                    <button type="submit" class ="tiny soft plain thic">turn off</button>
+                </form>
+            </div>
+            <p class="tiny">members can volunteer</p>
+            {% endif %}
+        </div>
+    </div>
+<!-- END TOGGLE PUBLIC -->
+<!-- UPDATE STATUS -->
+    <div class="buddies snapshot_thin highlight" id="update_stat">
+        <p onclick="nevermind(0)">update status:</p>
+        <form action="/update_status/{{project.id}}" method="post">
+            <div class="pals_mid">
+                <select name="status">
+                    <option value="proposed">proposed</option>
+                    <option value="pending resources">pending resources</option>
+                    <option value="ongoing">ongoing</option>
+                    <option value="hold">hold</option>
+                    <option value="concluded">concluded</option>
+                </select>
+                <button type="submit" class="btn tiny">update</button>
+            </div>
+        </form>
+    </div>
+<!-- END UPDATE STATUS -->
+<!-- UPDATE TYPE -->
+    <div class="buddies snapshot_thin highlight" id="update_type">
+        <p onclick="nevermind(1)">update type:</p>
+        <form action="/update_type/{{project.id}}" method="post">
+            <div class="pals_mid">
+                <select name="type">
+                    {% for interest in types: %}
+                    <option value="{{ interest.id }}">{{ interest.interest }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn tiny">update</button>
+            </div>
+        </form>
+        <p class="tiny">please search project types thoroughly before submitting for a new type, duplicate project types make it harder for people to find eachother</p>
+        <form id="int" action="/create_type/{{ project.id }}" method="post">
+            <div class="pals_mid tiny">
+                <input type="text" placeholder="new type" name="interest">
+                <button class="btn" type="submit">create!</button>
+            </div>
+        </form>
+    </div>
+<!-- END UPDATE TYPE -->
+<!-- TEAM -->
+    <div id="team_view">
+    <!-- CURRENT TEAM -->
+    <div class="sect">
+        <p class="sect_title">current team:&nbsp</p>
+        <div class="pals space">
+        {% for person in project.team: %}
+        <div class="sm_snap">
+            <div class="buddies left">
+                <a href="/profile/{{ person.id }}" class="tiny subtle_btn_blk">{{ person.alias }}</a>
+                {% for role in person.roles: %}
+                    <div class="pals_mid">
+                        <p class=" tiny thic">{{ role.title }}</p>
+                        <a href="/unassign/verify/{{ project.id }}/{{ person.id }}/{{ role.id }}" class="tiny">&nbspx</a>
+                    </div>
+                    <p class="tiny soft">{{ role.description }}</p>
+                {% endfor %}
+            </div>
+                {% if person.id not in project.organizers: %}
+                <form action="/add_organizer/{{ project.id }}" method="post">
+                    <input type="hidden" name="user_id" value="{{ person.id }}">
+                    <button type="submit" class="tiny thic plain soft">+ make organizer</button>
+                </form>
+                {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+    <!-- END CURRENT TEAM -->
+    <!-- NEEDED ROLES -->
+    <div class="sect">
+        <p class="sect_title">needed collaborators:</p>
+        <div class="pals space">
+            {% for role in project.needed_roles: %}
+                {% if role.volunteers: %}
+            <div class="sm_snap highlight">
+                <div class="buddies left">
+                    <p class="subtle_btn_blk tiny">{{ role.title }}</p>
+                    <p class="tiny soft">{{ role.description }}</p>
+                    <p class="tiny thic">skills needed:</p>
+                    <div class="sect">
+                        {% for skill in role.skillset: %}
+                        <form action="/delete_skillset/{{ project.id }}" method="post">
+                            <div class="pals">
+                                <input type="hidden" name="role_id" value="{{ role.id }}">
+                                <input type="hidden" name="skill_id" value="{{ skill.id }}">
+                                <a href="/people/skills/{{ skill.id }}" class="tiny_butt btn">{{ skill.skill }}</a>
+                                <button type="submit" class="plain">x</button>
+                            </div>
+                        </form>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="tiny soft thic" onclick="display(3)"> add skills</p>
+                <!-- VOLUNTEERS -->
+                    {% for volunteer in role.volunteers: %}
+                    <div class="pals_mid">
+                        <a class="tiny subtle_btn_blk" href="/profile/{{ volunteer['id'] }}">{{ volunteer['alias'] }}</a>
+                        <p class="tiny thic">&nbspvolunteered!</p>
+                    </div>
+                    <div class="pals space">
+                        <form action="/reject_volunteer/{{project.id}}" method="post">
+                            <input type="hidden" name="role_id" value="{{ role.id }}">
+                            <input type="hidden" name="user_id" value="{{ volunteer['id'] }}">
+                            <button type="submit" class="plain thic tiny ">reject</button>
+                        </form>
+                        <form action="/accept_volunteer/{{project.id}}" method="post">
+                            <input type="hidden" name="role_id" value="{{ role.id }}">
+                            <input type="hidden" name="user_id" value="{{ volunteer['id'] }}">
+                            <button type="submit" class="plain thic tiny">accept</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                    <!-- END VOLUNTEERS -->
+            </div>
+                {% else: %}
+            <div class="sm_snap">
+                <div class="buddies left">
+                    <p class="subtle_btn_blk tiny">{{ role.title }}</p>
+                    <p class="tiny soft">{{ role.description }}</p>
+                    <p class="tiny thic">skills needed:</p>
+                    <div class="sect">
+                        {% for skill in role.skillset: %}
+                        <form action="/delete_skillset/{{ project.id }}" method="post">
+                            <div class="pals">
+                                <input type="hidden" name="role_id" value="{{ role.id }}">
+                                <input type="hidden" name="skill_id" value="{{ skill.id }}">
+                                <a href="/people/skills/{{ skill.id }}" class="tiny_butt btn">{{ skill.skill }}</a>
+                                <button type="submit" class="plain">x</button>
+                            </div>
+                        </form>
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="tiny soft thic" onclick="display(3)"> add skills</p>
+            </div>
+                {% endif %}
+            {% endfor %}
+            <!-- ADD ROLE_SKILLSET -->
+            <div class="tiny buddies" id="skills">
+                <div class="tiny buddies snapshot_thin">
+                    <p onclick="nevermind(3)">skill:</p>
+                    <form action="/add_skillset/{{ project.id }}" method="post">
+                        <select name="role_id">
+                            {% for role in project.needed_roles: %}
+                            <option value="{{ role.id }}">{{ role.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="skill">
+                            {% for skill in skills: %}
+                            <option value="{{ skill.id }}">{{ skill.skill }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn tiny bigclose">add</button>
+                    </form>
+                    <p class="tiny soft thic" onclick="display(4), nevermind(3)"> add a new skill</p>
+                </div>
+            </div>
+            <!-- END ADD ROLE_SKILLSET -->
+        </div>
+    </div>
+    <p class="tiny soft thic" onclick="display(2)">+modify roles</p>
+    <!-- END NEEDED ROLES -->
+    <!-- ADD SKILL TO DATABASE -->
+    <div id="new_skills" class="tiny buddies snapshot_thin">
+        <p class="sect_title">new skill request:</p>
+        <form action="/create_skill/roles/{{ project.id }}" method="post">
+            <input type="text" name="skill" placeholder="enter new skill" class="tiny">
+            <input type="hidden" name="user_id" value="{{ user.id }}">
+            <button type="submit" class="btn tiny bigclose">submit</button>
+        </form>
+        <p class="tiny">please search skills thoroughly before submitting for a new skill, duplicate skills and interests make it harder for people to find eachother</p>
+    </div>
+    <!-- END ADD SKILL TO DATABASE -->
+    <!-- MODIFY ROLES -->
+    <div id="team_modify" class="sect">
+        <div class="pals space">
+            <p>modify roles:</p>
+            <p class="tiny soft" onclick="nevermind(2)">(exit)</p>
+        </div>
+        <div class="pals space">
+            {% for role in project.roles: %}
+            <div class="sm_snap">
+                <form action="/edit_role/{{ project.id }}" method="post">
+                    <div class="buddies">
+                        <input type="hidden" name="current_title" value="{{ role.title }}">
+                        <input type="text" name="title" value="{{ role.title }}" class="tiny thic">
+                        <textarea name="description" cols="20" rows="5" class="tiny">{{ role.description }}</textarea>
+                        <button type="submit" class="btn tiny bigclose">save</button>
+                    </div>
+                </form>
+            </div>
+            {% endfor %}
+            <div class="sm_snap">
+                <form action="/add_role/{{ project.id }}" method="post">
+                    <input type="text" name="title" placeholder="new role" class="tiny thic">
+                    <textarea name="description" class="tiny" placeholder="enter a description of what this role entails" cols="20" rows="5"></textarea>
+                    <button type="submit" class="btn tiny bigclose">save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- END MODIFY ROLES -->
+    </div>
+<!-- ENDTEAM -->
+<!-- ABOUT PROJECT -->
+    <p class="sect_title">about project:</p>
+    <div class="tiny center">
+        {% if project.about: %}
+        <div id="about" class="snapshot">
+            {% for string in project.aboutfmat: %}
+            <br>
+            <p>{{ string }}</p>
+            <br>
+            {% endfor %}
+            <p class="tiny soft thic bigclose" onclick="display(5), scare(0)">edit</p>
+        </div>
+        <form id="edit_about"action="/project/about/{{ project.id }}" method="post">
+            <div class="buddies">
+                <textarea class="center" name="about"cols="50" rows="25">{{ project.about }}</textarea>
+                <button class="btn close tiny" type="submit">save</button>
+            </div>
+        </form>
+        {% else %}
+        <form action="/project/about/{{ project.id }}" method="post">
+            <div class="buddies">
+                <textarea class="center" name="about"cols="35" rows="6" placeholder="This area is for a more detailed description of the project. Good things to include are a proposed timeline, needed resources, and current progress."></textarea>
+                <button class="btn close tiny" type="submit">save</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+<!-- END ABOUT PROJECT -->
+</div>
+<!-- PROJECT CHAT -->
+<div class="fix_icons actions close r">
+    <a href="/conversation/project/{{project.id}}" class="icon"><img src="{{ url_for('static',filename='img/icons/message.png')}}" alt="message icon" class="lg_icon_pic"></a>
+</div>
+<!-- END PROJECT CHAT -->

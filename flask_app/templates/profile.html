@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/prof_script.js')}}"></script>
+</head>
+<body>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+    <div class="content">
+    <!-- SEND MESSAGE -->
+        <div class="alert" id="new_message">
+            <div class="snapshot b_highlight">
+                <p class="puny thic b_txt_highlight bigclose" onclick="nevermind(0), nevermind(1), show(1)">x</p>
+                <form action="/create_chat" method="post">
+                    <div class="buddies_left">
+                        <p class="thic tiny">&nbspmessage {{ person.alias }}:</p>
+                        <input type="hidden" name="user_id" value="{{ person.id }}">
+                        <input type="text" name="title" placeholder="subject" class="tiny">
+                        <textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' class="tiny" name="message" cols="25" rows="3"placeholder="direct message"></textarea>
+                        <button type="submit" class="tiny_butt btn thic close">send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <!-- END SEND MESSAGE -->
+        <h3 class="center"><strong>{{ person.alias }}</strong></h3>
+        {% if user.city_id: %}
+            <p class="center sm thic">{{ person.location.city }},{{ person.location.area }}</p>
+        {% endif %}
+        <p class="mish center">
+            <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="open quotes">
+        {% if person.mission: %}
+            {{person.mission}}
+        {% else: %}
+            This person hasn't shared their mission yet.
+        {% endif %}
+            <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="close quotes">
+        </p>
+        {% if person.skillset: %}
+        <div class="sect">
+            <p class="title">skills:</p>
+            {% for skill in person.skillset: %}
+            <a href="/people/skills/{{ skill.id }}" class="btn puny">{{ skill.skill }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if person.associated_projects: %}
+        <div class="sect">
+            <p class="title">associated projects:</p>
+            {% for project in person.associated_projects: %}
+            <button class="snapshot" onclick="window.location.href='/project/{{ project.id }}'">
+                <div class= "pals space">
+                    <div class="center">
+                        <p class="info thic">status:</p>
+                        <p class="puny_butt btn">{{ project.status }}</p>
+                    </div>
+                    <div class="center">
+                        <p class="info thic">type:</p>
+                        <p class="puny_butt btn">{{ project.type }}</p>
+                    </div>
+                </div>
+                <div class="center">
+                    <p class="name"><strong>{{ project.title }}</strong></p>
+                    {% if project.is_recruiting == "yes": %}
+                    <p class="tiny soft thic"><strong>recruiting!</strong></p>
+                    {% endif %}
+                </div>
+                <p class="mish center">
+                    <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="open quotes">
+                    {{project.mission}}
+                    <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="close quotes">
+                </p>
+                <div class="sect">
+                    <p class="sect_title">current team:</p>
+                    {% for role in project.team: %}
+                    <a href="/profile/{{ role.teammate['id'] }}" class="subtle_btn">{{ role.teammate['alias']}}</a>
+                    {% endfor %}
+                </div>
+            </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% if person.about %}
+        <div class="sect" id="about">
+            <p class="title about">about:</p>
+            <p class="about">{{ person.about }}</p>
+            <p class="thic puny" onclick=hide(0)>(hide)</p>
+        </div>
+        {% endif %}
+        {% if person.interests: %}
+        <div class="sect">
+            <p class="title">interests:</p>
+            {% for interest in person.interests: %}
+            <a href="/people/interests/{{ interest.id }}" class="btn puny">{{ interest.interest }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% if user.id == person.id: %}
+    <!-- EDIT BUTTON -->
+    <a href="/edit_profile/{{ person.id }}" class="btn_flip l p_highlight thic ontop">Edit</a>
+    <!-- END EDIT BUTTON -->
+{% else: %}
+    <!-- ACTIONS -->
+    <div class="icons actions close r ontop">
+        <p class="icon" id="message" onclick="display(0), display(1), hide(1)"><img src="{{ url_for('static',filename='img/icons/message.png')}}" alt="message icon" class="lg_icon_pic"></p>
+        <p class="icon" id="messaged"><img src="{{ url_for('static',filename='img/icons/messaged.png')}}" alt="message icon" class="lg_icon_pic"></p>
+        {% if person.liked != True: %}
+        <form action="/profile/like/{{ person.id }}" method="post">
+            <button type="submit" class="icon"><img id="likey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/like.png')}}" alt="like icon"></button>
+        </form>
+        {% else %}
+        <form action="/profile/unlike/{{ person.id }}" method="post">
+            <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/liked.png')}}" alt="like icon"></button>
+        </form>
+        {% endif %}
+        {% if person.watched != True: %}
+        <form action="/profile/watch/{{ person.id }}" method="post">
+            <button type="submit" class="icon"><img id="watchey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watch.png')}}" alt="watch icon"></button>
+        </form>
+        {% else %}
+        <form action="/profile/unwatch/{{ person.id }}" method="post">
+            <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watching.png')}}" alt="watch icon"></button>
+        </form>
+        {% endif %}
+    </div>
+    <!-- ENDACTIONS -->
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/posted_projects.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+<div class="content">
+    {% for project in projects: %}
+    <button class="snapshot" onclick="window.location.href='/project/{{ project.id }}'">
+        <!-- TITLE AREA -->
+        <div class= "pals space">
+            <div class="center">
+                <p class="info thic">status:</p>
+                <p class="puny_butt btn">{{ project.status }}</p>
+            </div>
+            <div class="center">
+                <p class="info thic">type:</p>
+                <p class="puny_butt btn">{{ project.type }}</p>
+            </div>
+        </div>
+        <div class="center">
+            <p class="name"><strong>{{ project.title }}</strong></p>
+            {% if project.is_recruiting == "yes": %}
+            <p class="tiny soft thic"><strong>recruiting!</strong></p>
+            {% endif %}
+        </div>
+        <!-- END TITLE AREA -->
+        <!-- MISSION -->
+        <p class="mish center">
+            <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="open quotes">
+            {{project.mission}}
+            <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="close quotes">
+        </p>
+        <!-- END MISSION -->
+        <!-- RECRUTING INFO -->
+        {% if project.is_recruiting == "yes": %}
+        <p class="tiny center"><strong>people needed:</strong></p>
+        <div class="sect">
+            {% for role in project.needed_roles: %}
+            {% if role.is_filled == 'no': %}
+            <div class="pals">
+                <p class="sect_title">{{ role.title }}s:</p>
+                {% for skill in role.skillset: %}
+                <a href="/projects/skill/{{ skill.id }}" class="puny_butt btn">{{ skill.skill }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- END RECRUTING INFO -->
+        <!-- CURRENT TEAM -->
+        <div class="sect">
+            <div class="pals space">
+                <p class="sect_title">current team:</p>
+                {% for role in project.team: %}
+                <a href="/profile/{{ role['id'] }}" class="subtle_btn">{{ role['alias']}}</a>&nbsp
+                {% endfor %}
+            </div>
+        </div>
+        <!-- END CURRENT TEAM -->
+    </button>
+        <!-- ACTION BUTTONS -->
+    <div class="icons actions close r">
+        {% if project.liked != True: %}
+        <form action="/project/like/{{ project.id }}" method="post">
+            <button type="submit" class="icon"><img id="likey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/like.png')}}" alt="like icon"></button>
+        </form>
+        {% else %}
+        <form action="/project/unlike/{{ project.id }}" method="post">
+            <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/liked.png')}}" alt="like icon"></button>
+        </form>
+        {% endif %}
+        {% if project.watched != True: %}
+        <form action="/project/watch/{{ project.id }}" method="post">
+            <button type="submit" class="icon"><img id="watchey"class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watch.png')}}" alt="watch icon"></button>
+        </form>
+        {% else %}
+        <form action="/project/unwatch/{{ project.id }}" method="post">
+            <button type="submit" class="icon"><img class="lg_icon_pic" src="{{ url_for('static',filename='img/icons/watching.png')}}" alt="watch icon"></button>
+        </form>
+        {% endif %}
+    </div>
+        <!-- END ACTION BUTTONS -->
+    <br>
+    {% endfor %}
+</div>

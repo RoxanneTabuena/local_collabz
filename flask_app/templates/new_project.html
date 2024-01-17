@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/project_script.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+</head>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+<div class="content">
+    <div class="center">
+        <p class=" thic sm">Get it on Paper</p>
+        {% if user.has_organized == False: %}
+        <p class="puny">All you need to get started is a title and a goal</p>
+        {% endif %}
+        <form action="/create_project/{{ user.id }}" method="post">
+            <div class="buddies">
+                <input type="text" name="title" placeholder="project title">
+                <div class="mish">
+                    <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="quotes bigopen">
+                    <textarea name="mission" cols="26" rows="5" placeholder="Briefly define your goals mission. You can edit aspects of your projects at all stages in my projects."></textarea>
+                    <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="quotes bigclose">
+                </div>
+                <button class="btn bigclose puny save" type="submit">save</button>
+            </div>
+        </form>
+        <p class="puny">By default projects are set to private, so they will only be viewable by others when you indicate that you are ready for that</p>
+    </div>
+</div>

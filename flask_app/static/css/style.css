@@ -1,0 +1,526 @@
+/* general */
+*, .main{
+    max-width: 600px;
+    margin: unset;
+}
+
+body, h1, h2, h3, h4, h5, h6, p {
+    display: unset;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+p{
+    max-width: 667px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.nav{
+    color: white;
+    background-color: black;
+}
+
+.content {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+    padding:.5em .75em;
+    margin: 1em;
+    width: inherit;
+}
+
+.content > * {
+    margin-bottom: .5em;
+}
+/* endgeneral */
+/* specifics */
+.stats {
+    flex:1;
+}
+
+.drop {
+    padding: unset;
+    padding: .75em;
+}
+.drop:after{
+    content: '';
+    border: 4px solid transparent;
+    border-top: 4px solid white;
+    margin-left: 2px;
+    margin-bottom: 3px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.snapshot_thin{
+    border: black solid .5pt;
+    margin: 0em 0em .5em 0em;
+    background-color: white;
+    padding: .5em 1em;
+    overflow: auto;
+}
+
+.snapshot{
+    border: black solid 1.5pt;
+    margin: 0em 0em .5em 0em;
+    background-color: white;
+    padding: .5em 1em;
+    overflow-wrap: normal;
+}
+
+.chat{
+    display: flex;
+    flex-direction: column-reverse;
+    border: black solid 1.5pt;
+    margin: 0em 0em .5em 0em;
+    background-color: white;
+    padding: .5em 1em;
+    overflow-wrap: normal;
+    max-height: 400px;
+    overflow: scroll;
+}
+
+.msg_me {
+    display: flex;
+    align-items: last baseline;
+    margin: .2em 0em;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.msg {
+    display: flex;
+    align-items: last baseline;
+    margin: .2em 0em;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.msg_c {
+    max-width: 18em;
+    background:lavender;
+    padding: .1em .5em;
+    margin: .5em 1em;
+    border-radius: .3em;
+    overflow-wrap: break-word;
+}
+
+.msg_c_me {
+    max-width: 18em;
+    background:lightcyan;
+    padding: .1em .5em;
+    margin: .5em 1em;
+    border-radius: .3em;
+    overflow-wrap: break-word;
+}
+
+.msg_u {
+    font-size: x-small;
+    color: white;
+    background: black;
+    padding: .1em .5em;
+    font-weight: bold;
+    border-radius: .3em;
+    width: fit-content;
+}
+
+.sm_snap{
+    margin: 0em 0em .5em 0em;
+    border: black solid 1.5pt;
+    background-color: white;
+    padding: .25em .5em;
+    overflow: auto;
+    width: 49%;
+}
+
+.sm_snap_thin{
+    margin: 0em 0em .5em 0em;
+    border: black solid .7pt;
+    background-color: white;
+    padding: .25em .5em;
+    overflow: auto;
+    width: 49%;
+}
+
+.snapshot > *{
+    font-size: small;
+    margin-block-start: .2em;
+    margin-block-end: .2em;
+}
+
+.sort > .drop:after{
+    content: '';
+    border: 4px solid transparent;
+    border-top: 4px solid black;
+    margin-left: 2px;
+    margin-bottom: 3px;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.fix_icons{
+    position: fixed;
+    bottom: 1em;
+    right: 0;
+}
+
+.icon{
+    border: solid black 1.5pt;
+    border-radius: 50%;
+    width:fit-content;
+    padding: unset;
+    margin-right: .25em;
+}
+
+.icon_pic{
+    width: 15px;
+    height: 15px;
+}
+
+.lg_icon_pic{
+    width: 30px;
+    height: 30px;
+}
+
+.actions {
+    display:flex;
+}
+
+.about {
+    line-height: 0px;
+    margin: unset;
+    margin-block-start: unset;
+    margin-block-end: unset;
+}
+
+.quotes {
+    width: 25px;
+    height: 25px;
+}
+
+.head > h3 {
+    margin-bottom: 2em;
+    text-align: center !important;
+}
+
+.edit_title > *{
+    margin-bottom: 1em;
+}
+
+select {
+    border: solid black 1pt;
+}
+/* end specifics */
+/* formatting classes */
+.bigopen{
+    float: left;
+    align-self: flex-start;
+}
+
+.open{
+    align-self: flex-start;
+}
+
+.bigclose {
+    float: right;
+    align-self: flex-end;
+}
+
+.close {
+    align-self: flex-end;
+}
+
+
+.center {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.info{
+    all:unset;
+    flex-direction: column;
+    margin: 0em 2em;
+    font-size: xx-small;
+}
+
+.buddies{
+    align-items: center;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.buddies_left{
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pals_mid{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-self: center;
+    align-content: center;
+}
+
+.pals{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-self: center;
+    align-content: flex-start;
+}
+
+.space {
+    justify-content: space-between;
+
+}
+
+.mspace {
+    justify-content: space-between;
+    margin: 0em 1em 0em 1em;
+}
+.mspace>* {
+    margin-left: 2em;
+}
+
+.title {
+    text-align: left;
+    font-weight: bold;
+}
+.left {
+    text-align: left;
+}
+
+.sect{
+    display: inline-block;
+    width: 100%;
+    word-wrap: normal;
+}
+
+.mish{
+    display: inline-block;
+    word-wrap: break-word !important;
+}
+
+.mish > textarea{
+    font-size: small;
+}
+.save{
+    position: relative;
+    right: 28px;
+    bottom: 1.1em;
+}
+
+input, select, textarea {
+    width:fit-content;
+    margin: .5em;
+}
+
+.thin{
+    padding: 0em 3em;
+}
+
+.pg_title{
+    position:absolute;
+    top: 4em;
+    margin: 0em 8em;
+}
+/* end formatting classes */
+/* position classes */
+.ontop{
+    position: fixed;
+    bottom: 5pt;
+}
+
+.inmiddle{
+    position:relative;
+    margin: 0 auto;
+    top: 75%;
+}
+
+form > * {
+    margin: none;
+}
+
+.l{
+    float: left;
+    left: 5pt;
+    text-align: left;
+}
+
+.r{
+    float: right;
+    right: 10pt;
+    text-align: right;
+}
+
+.mids{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    padding:.5em .75em;
+    margin: 1em;
+    width: inherit;
+    min-height: 35em;
+}
+
+.alert {
+    position: fixed;
+    left: 2em;
+    bottom: 3em;
+}
+/* end position classes */
+/* asthetic classes */
+.feed_title{
+    background-color: black;
+    border: none;
+    border-radius: 2px;
+    color:white;
+    padding: 0em .5em;
+    font-weight: bold;
+    font-size: larger;
+    width: fit-content;
+    text-align: center;
+}
+
+.btn{
+    background-color: black;
+    border: none;
+    border-radius: 2px;
+    color:white;
+    padding: 0em .5em;
+    margin: .2em;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.btn_flip{
+    background-color: white;
+    border: none;
+    border-radius: 2px;
+    color: black;
+    padding: 0em .5em;
+    margin: .2em;
+    text-decoration: none;
+    width: fit-content;
+}
+
+
+.edit{
+    background-color: red;
+}
+
+.soft {
+    color: lightslategray;
+    border: none;
+}
+
+.subtle_btn{
+    color:lightslategray;
+    text-decoration: underline;
+    font-weight: bold;
+    background-color: white;
+    border: none;
+}
+
+.subtle_btn_blk{
+    color: black;
+    font-weight: bold;
+    text-decoration: underline;
+    background-color: white;
+    border: none;
+}
+
+.tiny_butt {
+    font-size: x-small;
+    padding: 0em .5em;
+}
+
+.puny_butt {
+    font-size: xx-small;
+    padding: 0em .5em;
+}
+
+.big {
+    font-size: large;
+    margin-bottom: 1em;
+}
+.sm{
+    font-size: small;
+}
+.tiny{
+    font-size: x-small;
+}
+.puny{
+    font-size: xx-small;
+}
+.big_top{
+    margin-top: 1em;;
+}
+
+.big_bottom{
+    margin-bottom: 1em;
+}
+
+.inline {
+    display: unset;
+    display: inline;
+}
+
+.thic{
+    font-weight: bold;
+}
+
+.slim {
+    padding: 0em 2em;
+}
+
+.plain{
+    border: none;
+    background-color: white;
+}
+
+.green{
+    color: darkgreen;
+}
+
+.red {
+    color: red;
+}
+/* pink highlights is for decisionmaking, reaching out */
+.highlight {
+    box-shadow: 0 0 5px 1px rgb(202, 5, 246);
+}
+.txt_highlight{
+    text-shadow: 0 0 4px rgb(202, 5, 246);
+}
+/* blue highlight is for new info/notifications */
+.b_highlight {
+    box-shadow: 0 0 8px 1px rgb(105, 179, 248);
+}
+.b_txt_highlight{
+    text-shadow: 0 0 4px rgb(105, 179, 248);
+}
+/* purple highlight is for editing */
+.p_highlight {
+    box-shadow: 0 0 5px 1px rgb(101, 2, 215);
+}
+.p_txt_highlight{
+    text-shadow: 0 0 4px   rgb(101, 2, 215);
+}
+
+.border{
+    border: .5pt solid black;
+}
+/* end asthetic classes */
+/* specifics */

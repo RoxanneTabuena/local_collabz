@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <script defer type="text/javascript"src="{{ url_for('static',filename='js/index_script.js')}}"></script>
+        <title>Document</title>
+    </head>
+    <body>
+    <div class="content">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages%}
+            <p class="tiny center"><em>{{ message }}</em></p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="buddies">
+            <h1 class="center thic">LocalCollabz</h1>
+            <h4 class="center">Post ideas. Build teams. Make things happen.</h3>
+            <div class="pals space" id="l_or_r">
+                <p><button class="btn l" onclick="register()">Register</button></p>
+                <p><button class="btn r" onclick="login()">Login</button></p>
+            </div>
+        </div>
+        <div class="w3-display-container w3-center" id="login">
+            <form class="w3-container w3-padding w3-display-topmiddle w3-round-large w3-third" action="/login" method="post">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="text" name="email" placeholder="email">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="password" name="password" placeholder="password">
+                <button class="w3-button w3-black w3-right w3-round-large w3-hover-white" type="submit">Login</button>
+                <a href="/" class="w3-button w3-black w3-round-large w3-hover-white w3-left">Back</a>
+            </form>
+        </div>
+        <div class="w3-display-container w3-center" id="register">
+            <form class="w3-container w3-padding w3-display-topmiddle w3-round-large w3-third" action="/register" method="post">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="text" name="f_name" placeholder="First Name">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="text" name="l_name" placeholder="Last Name">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="text" name="alias" placeholder="Social Alias (optional)">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="text" name="email" placeholder="email">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="password" name="password" placeholder="password">
+                <input class="w3-input w3-round-xlarge w3-text w3-border w3-border-black w3-margin-right w3-margin-bottom" type="password" name="password_conf" placeholder="confirm password">
+                <div class="pals space">
+                    <a href="/" class="w3-button w3-black w3-round-large w3-hover-white w3-left">Back</a>
+                    <button class="w3-button w3-black w3-round-large w3-hover-white w3-left" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

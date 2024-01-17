@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Document</title>
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/edit_prof_script.js')}}"></script>
+</head>
+<body>
+    <!-- NAV -->
+    <div class="nav w3-bar w3-black">
+        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
+                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
+                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+            </div>
+        </div>
+        <div class="w3-dropdown-hover">
+            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
+                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
+                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
+                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
+            </div>
+        </div>
+    </div>
+    <!-- END NAV -->
+    <div class="content">
+        <!-- PITCHING CUSTOMIZATION -->
+        {% if user.skillset == 'No_Skillz' and user.interests == 'Boring':  %}
+        <div class="sect">
+            <a class="tiny" onclick="hide(this)">
+                <strong>
+                    LocalCollabz is ment to be a platform for you to exress your vision and inspire connections with others. 
+                    Adding lots of skills, interests, and ideas to your profile makes it easier for people to find you.
+                    But profile templates were designed to look beautiful with whatever amount of information you are comfortable with.
+                </strong>
+            </a>
+        </div>
+        {% endif %}
+        <!-- END CUSTOMIZATION PITCH -->
+        <!-- EDIT INFO -->
+        <form class="center buddies sm" action="/update/{{user.id}}" method="post">
+            <!-- alias -->
+            <div class="pals sm">
+                <div class="buddies">
+                    <p class="title">alias:</p>
+                    <a onclick="display(0)" class="tiny">Whats an alias?</a>
+                </div>
+                <input type="text" name="alias" value ="{{user.alias}}">
+            </div>
+            <p class="tiny" id="alias_info" onclick="hide(this)">
+                How would you like to be known? Your first name is a completly normal, acceptible answer. 
+                We wanted to provide an option those of us who prefer to keep our public and personal life seprate. 
+                Common aliases include: stagenames, social media usernames, art tags, and pen names.
+            </p>
+            <!-- location -->
+            <div class="pals mspace">
+                <div class="buddies">
+                    <p class="title">location:</p>
+                </div>
+                {% if user.city_id: %}
+                <div class="buddies">
+                    <p>{{ user.location.city }}, {{ user.location.area }}</p>
+                    <a onclick="display(1)" class="tiny">Change?</a>
+                </div>
+                {% endif %}
+            </div>
+            <div id="cities">
+                <div class="pals">
+                    <select name="city_id">
+                        {% for city in cities :%}
+                        <option value="{{city.id}}">{{ city.city }},{{ city.area}}</option>
+                        {% endfor %}
+                    </select>
+                    <p class="soft thic puny" onclick="display(2)">Dont see your city?</p>
+                </div>
+            </div>
+            <div class="sect">
+                <!-- mission -->
+                <p class="title sm open">mission:</p>
+                <div class="sm mish">
+                    <img src="{{ url_for('static',filename='img/icons/open_quote.png')}}" alt="open quotes icon" class="quotes open">
+                    {% if user.mission and user.mission != 'False': %}
+                    <textarea name="mission" cols="26" rows="5">{{ user.mission }}</textarea>
+                    {% else: %}
+                    <textarea name="mission" cols="26" rows="5" placeholder="Enter a short description of how youd like to distinguish yourself. Could be a motto, personal mantra, or just your job title."></textarea>
+                    {% endif %}
+                    <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="quotes close">
+                </div>
+            </div>
+            <div class="sect">
+                <!-- about -->
+                <p class="title sm open">about:</p>
+                <div class="tiny">
+                    {% if user.about and user.about != 'False': %}
+                    <textarea name="about" cols="40" rows="5">{{ user.about }}</textarea>
+                    {% else: %}
+                    <textarea name="about" cols="40" rows="5">
+                        This is a place for extra info about yourself. Its a great place 
+                        to describe what kinds of projects you are interested in,
+                        your personal passions, or experience with past projects.
+                    </textarea>
+                    {% endif %}
+                </div>
+            </div>
+            <button class="btn close" type="submit">Update</button>
+        </form>
+        <!-- END INFO EDIT -->
+        <!-- CITY REQUEST -->
+        <div id="add_city">
+                <div class="buddies center">
+                    <p class="info">Request a new location from the mods</p>
+                    <form class="buddies" action="/city_request/{{ user.id }}" method="post">
+                        <input type="text" name="city" placeholder="city name">
+                        <input type="hidden" name="creator_id" value="{{ user.id }}">
+                        <input type="text" name="area" placeholder="state">
+                        <p class="info">(please enter country if not in US)</p>
+                        <button type="submit" class="btn close">request</button>
+                    </form>
+                    <p class="info">Requests should be approved within 24h, as long as they are a real place.</p>
+                </div>
+        </div>
+        <!-- END CITY REQUEST -->
+        <!-- SKILL MENU -->
+        <div class="sect sm">
+            <p class="title">skills:</p>
+            <div class="pals">
+                {% if not user.skillset == 'No_Skillz:' %}
+                {% for skill in user.skillset: %}
+                <p class="btn tiny">{{ skill.skill }}</p>
+                {% endfor %}
+                {% endif %}
+                <button onclick="display(3)" class="btn">+skill</button>
+            </div>
+            <div id="skillADD">
+                <form action="/update/skills/{{ user.id }}" method="post">
+                    <select name="skill_id">
+                        {% for skill in skills: %}
+                        {% if skill.id not in has_skills %}
+                        <option value="{{skill.id}}">{{skill.skill}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn">add</button>
+                </form>
+                <a class="info" onclick="display(4), hide(this)">create a new skill</a>
+                <form id="sthkill" action="/create_skill/{{ user.id }}" method="post">
+                    <div class="pals">
+                        <input type="text" placeholder="new skill" name="skill">
+                        <button class="btn" type="submit">create!</button>
+                    </div>
+                </form>
+            </div>
+            <!-- END SKILL MENU -->
+            <!-- INTEREST MENU -->
+            <div class="sect" sm>
+                <div class="pals">
+                    <p class="title">interests:</p>
+                    <p class="soft puny">(or project types)</p>
+                </div>
+                <div class="pals">
+                    {% if not user.interests == 'Boring': %}
+                    {% for interest in user.interests: %}
+                    <p class="btn tiny">{{ interest.interest }}</p>
+                    {% endfor %}
+                    {% endif %}
+                    <button id="type" onclick="display(5)" class="btn">+interest</button>
+                </div>
+                <div id="interADD">
+                    <form action="/update/interests/{{user.id}}" method="post">
+                        <div class="pals">
+                            <select name="interest_id">
+                                {% for interest in interests: %}
+                                {% if interest.id not in has_interests: %}
+                                <option value="{{interest.id}}">{{interest.interest}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn">add</button>
+                        </div>
+                    </form>
+                    <a class="info" onclick="display(6), hide(this)">create a new interest</a>
+                    <form id="int" action="/create_interest/{{ user.id }}" method="post">
+                        <div class="pals">
+                            <input type="text" placeholder="new interest" name="interest">
+                            <button class="btn" type="submit">create!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- END INTEREST MENU -->
+    </div>
+    </body>
+    </html>
