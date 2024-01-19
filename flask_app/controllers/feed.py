@@ -73,11 +73,14 @@ def feed(id):
             featured_project = Project.get_one(projects[0])
             featured_project.team = User.get_team(featured_project.id)
             featured_project.roles_needed = Role.unfilled_roles(featured_project.id)
-            skillsets = []
+            skills= []
             for role in featured_project.roles_needed:
-
-    else: featured_project = False
-    return render_template('feed.html', user=user, messages = messages, project_updates=project_updates, active_chats=active_chats, project=featured_project, attention = attention, project_match=project_match)
+                role.skillset = Skill.get_role_skillset(role.id)
+                for skill in role.skillset:
+                    skills.append(skill.skill)
+            
+        else: featured_project = False
+        return render_template('feed.html', user=user, messages = messages, project_updates=project_updates, active_chats=active_chats, project=featured_project, attention = attention, project_match=project_match)
 
 @app.route('/dismiss/<int:id>', methods = ['POST'])
 def dismiss(id):
