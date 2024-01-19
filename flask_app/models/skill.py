@@ -78,3 +78,4 @@ class Skill:
         for row in results:
             projects.append(row['id'])
         return projects
+    
