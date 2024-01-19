@@ -106,14 +106,14 @@
                 {{project.mission}}
                 <img src="{{ url_for('static',filename='img/icons/close_quote.png')}}" alt="close quotes icon" class="close quotes">
             </p>
-            <div class="sect">
+            <div class="sect left">
                 <p class="sect_title thic left">current team:</p>
                 {% for person in project.team: %}
                 <a href="/profile/{{ person.id }}" class="subtle_btn">{{ person.alias }}</a>
                 {% endfor %}
             </div>
             {% if project.roles_needed: %}
-            <div class="pals space">
+            <div class="sect left">
                 <p class="sect_title thic">collaborators needed:</p>
                 {% for role in project.roles_needed: %}
                 <p>{{ role.title }}</a>
@@ -121,10 +121,10 @@
             </div>
             {% endif %}
             {% if project.skills_needed: %}
-            <div class="pals space">
+            <div class="sect left">
                 <p class="sect_title thic">skills desired:</p>
                 {% for skill in project.skills_needed: %}
-                <p>{{ skill.title }}</a>
+                <p>{{ skill.skill }}</a>
                 {% endfor %}
             </div>
             {% endif %}
