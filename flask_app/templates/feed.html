@@ -124,7 +124,11 @@
             <div class="sect left">
                 <p class="sect_title thic">skills desired:</p>
                 {% for skill in project.skills_needed: %}
-                <p>{{ skill.skill }}</a>
+                {% if skill.has: %}
+                <p class="txt_highlight">{{ skill.skill }}</a>
+                {% else %}
+                <p>{{ skill.skill }}</p>
+                {% endif %}
                 {% endfor %}
             </div>
             {% endif %}

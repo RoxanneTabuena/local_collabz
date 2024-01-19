@@ -66,7 +66,6 @@ def feed(id):
         # sort by found relevance
         if project_match != {}:
             project_match = dict(reversed(sorted(project_match.items(), key=lambda x:x[1])))
-            print(project_match)
             projects = []
             for item in project_match:
                 projects.append(item)
@@ -77,9 +76,10 @@ def feed(id):
             for role in featured_project.roles_needed:
                 role.skillset = Skill.get_role_skillset(role.id)
                 for skill in role.skillset:
+                    if skill.id in user_skills:
+                        skill.has = True
                     skills.append(skill)
             featured_project.skills_needed = skills
-            print(skills[0].skill)
         else: featured_project = False
         return render_template('feed.html', user=user, messages = messages, project_updates=project_updates, active_chats=active_chats, project=featured_project, attention = attention, project_match=project_match)
 

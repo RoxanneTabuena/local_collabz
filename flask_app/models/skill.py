@@ -12,6 +12,8 @@ class Skill:
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
 
+        self.has = False
+
     @classmethod
     def create(cls, data):
         query = "INSERT INTO skills (skill, score, creator_id) VALUES ( %(skill)s, '1', %(id)s)"
