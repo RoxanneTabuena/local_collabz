@@ -51,7 +51,7 @@
             {% if project_updates %}
             <div class="pals">
                 <a class="puny thic b_txt_highlight" href="/projects/user/{{ user.id }}">view</a>
-                <p class="puny">&nbspnew changes in:</p>
+                <p class="puny">&nbspnew changes in:&nbsp</p>
                 <p>{% for project in project_updates[0:-2]: %}
                 {{ project }},
                 {% endfor %}
@@ -67,7 +67,7 @@
             {% if active_chats: %}
             <div class="pals">
                 <a class="puny thic b_txt_highlight" href="/messages/user/{{ user.id }}">view</a>
-                <p class="puny">&nbspnew messages in:</p>
+                <p class="puny">&nbspnew messages in:&nbsp</p>
                 <p>{% for chat in active_chats[0:-2]: %}
                 {{ chat }},
                 {% endfor %}
@@ -86,7 +86,7 @@
     <!-- FEATURED PROJECT -->
     {% if project %}
     <div class="center">
-        <p class="feed_title big_bottom">$$ skill $$ Needed</p>
+        <p class="feed_title big_bottom">Talent Needed:</p>
         <button class="snapshot" onclick="window.location.href='/project/{{ project.id }}'">
             <div class= "pals space">
                 <div class="center">

@@ -66,10 +66,12 @@ def feed(id):
         # sort by found relevance
         if project_match != {}:
             project_match = dict(reversed(sorted(project_match.items(), key=lambda x:x[1])))
+            print(project_match)
             projects = []
             for item in project_match:
                 projects.append(item)
             featured_project = Project.get_one(projects[0])
+            featured_project.team = User.get_team(featured_project.id)
     else: featured_project = False
     return render_template('feed.html', user=user, messages = messages, project_updates=project_updates, active_chats=active_chats, project=featured_project, attention = attention, project_match=project_match)
 

@@ -67,10 +67,10 @@ class Skill:
         for row in results:
             skillset.append(row['skill_id'])
         return skillset
-    
+
     @classmethod
     def match_projects(cls, data):
-        query = "SELECT projects.id FROM role_skillset JOIN roles on role_id = roles.id JOIN projects ON project_id = projects.id WHERE is_filled = 'no' AND skill_id = %(skill_id)s"
+        query = "SELECT projects.id FROM role_skillset JOIN roles on role_id = roles.id JOIN projects ON project_id = projects.id WHERE is_filled = 'no' AND is_recruiting = 'yes' AND skill_id = %(skill_id)s"
         results = connectToMySQL(cls.DB).query_db(query, data)
         if len(results) < 1:
             return False
