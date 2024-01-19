@@ -156,3 +156,19 @@ class Role:
         if len(results) < 1:
             return False
         return True
+
+    @classmethod
+    def unfilled_roles(cls, id):
+        data = {'project_id' : id}
+        query ="""SELECT roles.id, roles.title, roles.description, roles.is_filled,
+            roles.created_at, roles.updated_at, roles.user_id, roles.project_id
+            FROM projects JOIN roles on projects.id = project_id
+            WHERE is_filled = 'no' AND projects.id = %(project_id)s"""
+        results = connectToMySQL(cls.DB).query_db(query,data)
+        if len(results) < 1:
+            return False
+        roles = []
+        for row in results:
+            roles.append(cls(row))
+        return roles
+
