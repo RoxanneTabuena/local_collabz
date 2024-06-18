@@ -40,7 +40,14 @@ def register():
     user = User.retrieve_via_email(data)
     session['logged_in'] = True
     session['user_id'] = user.id
-    return redirect('/feed/' + str(user.id))
+    return redirect('/new_user/' + str(user.id))
+
+@app.route('/new_user/<int:id>')
+def new_user(id):
+    user = User.retrieve_via_id(id)
+    skills = Skill.get_all()
+    interests = Interest.get_all()
+    return render_template('new_user.html', user=user, skills = skills, interests = interests)
 
 @app.route('/logout')
 def logout():
@@ -175,6 +182,26 @@ def create_skill(id):
     User.update_score(data)
     return redirect ('/edit_profile/'+str(id))
 
+@app.route('/new/create_skill/<int:id>', methods=['POST'])
+def create_skill_new(id):
+    skill = request.form['skill'].lower()
+    data = {'skill' : skill,
+            'id' :id}
+    Skill.create(data)
+    skill = Skill.get_one(skill)
+    data['skill_id'] = skill.id
+    data['user_id'] = id
+    User.add_skill(data)
+    flash('skill added:)')
+    user = User.retrieve_via_id(session['user_id'])
+    user.score += 2
+    data = {
+        'id' : user.id,
+        'score' : user.score
+    }
+    User.update_score(data)
+    return redirect ('/new_user/'+str(id))
+
 @app.route('/create_interest/<int:id>', methods=['POST'])
 def create_interest(id):
     interest = request.form['interest'].lower()
@@ -194,6 +221,26 @@ def create_interest(id):
     }
     User.update_score(data)
     return redirect ('/edit_profile/'+str(id))
+
+@app.route('/new/create_interest/<int:id>', methods=['POST'])
+def create_interest_new(id):
+    interest = request.form['interest'].lower()
+    data = {'interest' : interest,
+            'id' :id}
+    Interest.create(data)
+    interest = Interest.get_one(interest)
+    data['interest_id'] = interest.id
+    data['user_id'] = id
+    User.add_interest(data)
+    flash('interest added:)')
+    user = User.retrieve_via_id(session['user_id'])
+    user.score += 2
+    data = {
+        'id' : user.id,
+        'score' : user.score
+    }
+    User.update_score(data)
+    return redirect ('/new_user/'+str(id))
 
 @app.route('/new_city/<int:id>', methods=['POST'])
 def request_city(id):

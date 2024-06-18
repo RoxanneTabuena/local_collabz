@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-body, h1, h2, h3, h4, h5, h6, p {
+* {
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -16,12 +16,57 @@ p{
 a {
     text-decoration: none;
 }
-
+/* nav styling */
 nav{
+    align-items: baseline;
     display:flex;
     color: white;
     background-color: black;
+    justify-content: space-between;
+    padding: .2rem;
 }
+
+#logo{
+    color: white;
+    padding:.5rem
+}
+
+.dropbtn {
+    border: none;
+}
+
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.menumode {
+    color: black;
+    background-color: white;
+    border-bottom: none;
+    border: 2px solid black;
+}
+
+.dropmenu {
+    color: black;
+    background-color: white;
+    border-top: none;
+    border: 2px solid black;
+    display:none;
+    position: absolute;
+    margin-top: .4rem;
+    z-index: 1;
+
+}
+
+.dropmenu a {
+    display:block;
+}
+
+.show {
+    display: block;
+}
+
 
 .content {
     display: flex;
@@ -451,8 +496,8 @@ form > * {
     border: none;
     border-radius: 2px;
     color:white;
-    padding: 0em .5em;
-    margin: .2em;
+    padding: 0rem .5rem;
+    margin: .2rem;
     text-decoration: none;
     width: fit-content;
 }
@@ -577,3 +622,8 @@ form > * {
 }
 /* end asthetic classes */
 /* specifics */
+@media only screen and (max-width: 480px) and (orientation: portrait) {
+    body {
+        height: 600px;
+    }
+}

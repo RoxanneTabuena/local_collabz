@@ -1,6 +1,7 @@
 from flask_app.config.mysqlconnection import connectToMySQL
 from flask import flash
 
+
 class Conversation:
     DB = "local_collabz_schema"
     def __init__(self, data):

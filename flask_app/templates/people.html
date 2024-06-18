@@ -4,33 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script defer type="text/javascript"src="{{ url_for('static',filename='js/people_script.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Document</title>
 </head>
 <body>
     <!-- NAV -->
-    <div class="nav w3-bar w3-black">
-        <a href="/feed" class="w3-button w3-bar-item w3-black w3-hover-black" ><strong>LocalCollabz</strong></a>
-        <div class="w3-dropdown-hover">
-            <button class="sm drop w3-button w3-black w3-hover-white">Explore&nbsp</button>
-            <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                <a href="/projects" class="w3-bar-item w3-button w3-black w3-hover-white">Projects</a>
-                <a href="/people" class="w3-bar-item w3-button w3-black w3-hover-white">People</a>
-                <a href="/watchlist/projects/{{ user.id }}"class="w3-bar-item w3-button w3-black w3-hover-white">Watchlist</a>
+    <nav>
+        <a id="logo" href="/feed" ><strong>LocalCollabz</strong></a>
+        <div>
+            <div class="dropdown">
+                <button class="dropbtn btn thic" onclick="dropdown('explore')">Explore&nbsp</button>
+                <div id="explore" class="dropmenu">
+                    <a class="btn thic sm" href="/projects">Projects</a>
+                    <a class="btn thic sm" href="/people">People</a>
+                    <a class="btn thic sm" href="/watchlist/projects/{{ user.id }}">Watchlist</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn btn thic" onclick="dropdown('user_nav')">{{ user.alias }}&nbsp</button>
+                <div id="user_nav"class="dropmenu">
+                    <a class="btn thic sm" href="/projects/user/{{ user.id }}">My Projects</a>
+                    <a class="btn thic sm" href="/messages/{{ user.id }}">Messages</a>
+                    <a class="btn thic sm" href="/profile/{{ user.id }}">Profile</a>
+                    <a class="btn thic sm" href="/logout">Sign Out</a>
+                </div>
             </div>
         </div>
-        <div class="w3-dropdown-hover">
-            <button class="sm drop w3-button w3-black w3-hover-white">{{ user.alias }}&nbsp</button>
-            <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                <a href="/projects/user/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">My Projects</a>
-                <a href="/messages/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Messages</a>
-                <a href="/profile/{{ user.id }}" class="w3-bar-item w3-button w3-black w3-hover-white">Profile</a>
-                <a href="/logout" class="w3-bar-item w3-button w3-black w3-hover-white">Sign Out</a>
-            </div>
-        </div>
-    </div>
+    </nav>
     <!-- END NAV -->
     <div class="content">
         <div id="page_nav"class="w3-container">

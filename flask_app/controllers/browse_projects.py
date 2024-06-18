@@ -1,3 +1,5 @@
+# alphabatize import statements
+""" DESCRIBE MODULE"""
 from flask_app import app
 from flask import Flask, render_template, redirect, session, request, flash
 from flask_app.models.project import Project
@@ -7,6 +9,7 @@ from flask_app.models.user import User
 from flask_app.models.role import Role
 from flask_app.models.notification import Notification
 from flask_app.models.conversation import Conversation
+
 
 @app.route('/project/<int:id>')
 def project(id):
@@ -69,6 +72,7 @@ def browse_projects():
             project.watched = True
     return render_template('/projects.html', projects = projects, user=user)
 
+
 @app.route('/watchlist/projects/<int:id>')
 def watched_projects(id):
     user = User.retrieve_via_id(session['user_id'])
@@ -87,6 +91,7 @@ def watched_projects(id):
             project.watched = True
     return render_template('/watch_projects.html', projects = projects, user=user)
 
+
 @app.route('/project/like/<int:id>', methods=['POST'])
 def like_project(id):
     data = {
@@ -103,6 +108,7 @@ def like_project(id):
     Project.update_score(data)
     return redirect('/project/'+str(id))
 
+
 @app.route('/project/unlike/<int:id>', methods=['POST'])
 def unlike_project(id):
     data = {
@@ -111,6 +117,7 @@ def unlike_project(id):
     }
     User.unlike_project(data)
     return redirect('/project/'+str(id))
+
 
 @app.route('/project/watch/<int:id>', methods=['POST'])
 def watch_project(id):
@@ -127,6 +134,7 @@ def watch_project(id):
     }
     Project.update_score(data)
     return redirect('/project/'+str(id))
+
 
 @app.route('/project/unwatch/<int:id>', methods=['POST'])
 def unwatch_project(id):
