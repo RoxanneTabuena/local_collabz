@@ -2,10 +2,10 @@
 *, .main{
     max-width: 600px;
     margin: unset;
+    box-sizing: border-box;
 }
 
 body, h1, h2, h3, h4, h5, h6, p {
-    display: unset;
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -17,7 +17,8 @@ a {
     text-decoration: none;
 }
 
-.nav{
+nav{
+    display:flex;
     color: white;
     background-color: black;
 }
@@ -33,6 +34,10 @@ a {
 
 .content > * {
     margin-bottom: .5em;
+}
+
+.single_page {
+    height: 100vh
 }
 /* endgeneral */
 /* specifics */
@@ -214,6 +219,54 @@ select {
 }
 /* end specifics */
 /* formatting classes */
+
+.wel {
+    font-size: small;
+}
+
+.multiform{
+    height: 100%;
+}
+.input_list *{
+    display: flex;
+    align-items: baseline;
+}
+
+.input_list input {
+    height: .5rem;
+}
+
+#int_user {
+    justify-content: flex-end;
+    display: flex;
+    flex-flow: column wrap;
+    height: 100%;
+}
+
+.catagory {
+    height: 50%;
+}
+
+#new_i {
+    position:absolute;
+    top: 10%;
+    left:25%
+}
+#new_s {
+    position: absolute;
+    top: 60%;
+    left:25%
+}
+.form_space{
+    height: 15%;
+}
+
+.input_list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10%;
+}
+
 .bigopen{
     float: left;
     align-self: flex-start;
