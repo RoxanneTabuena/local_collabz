@@ -1,11 +1,8 @@
 /* general */
-*, .main{
+*{
     max-width: 600px;
     margin: unset;
     box-sizing: border-box;
-}
-
-* {
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -16,6 +13,11 @@ p{
 a {
     text-decoration: none;
 }
+#interest > option {
+    color: black;
+    display: block;
+}
+
 /* nav styling */
 nav{
     align-items: baseline;
@@ -66,7 +68,11 @@ nav{
 .show {
     display: block;
 }
-
+/* non nav page styling */
+#ghost_logo {
+    color: gainsboro;
+    text-align: right;
+}
 
 .content {
     display: flex;
@@ -332,10 +338,10 @@ select {
 
 
 .center {
+    text-align: center;
     align-items: center;
     display: flex;
     flex-direction: column;
-    text-align: center;
 }
 
 .info{
@@ -444,10 +450,6 @@ input, select, textarea {
     top: 75%;
 }
 
-form > * {
-    margin: none;
-}
-
 .l{
     float: left;
     left: 5pt;
@@ -534,7 +536,6 @@ form > * {
 .subtle_btn_blk{
     color: black;
     font-weight: bold;
-    text-decoration: underline;
     background-color: white;
     border: none;
 }
