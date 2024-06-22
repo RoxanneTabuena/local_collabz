@@ -1,77 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer type="text/javascript"src="{{ url_for('static',filename='js/newbie_script.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
     <title>Document</title>
 </head>
-    <body class="center small single_page">
-        <header> 
-            <nav>
-                <a href="/feed" ><strong>LocalCollabz</strong></a>
-                <div class="dropdown">
-                    <button class="dropbtn" onclick="dropdown()">Explore&nbsp</button>
-                    <div id="explore" class="dropmenu">
-                        <a href="/projects">Projects</a>
-                        <a href="/people">People</a>
-                        <a href="/watchlist/projects/{{ user.id }}">Watchlist</a>
-                    </div>
-                </div>
-                <div class="dropdown">
-                    <button class="dropdown">{{ user.alias }}&nbsp</button>
-                    <div id="user_nav"class="dropmenu">
-                        <a href="/projects/user/{{ user.id }}">My Projects</a>
-                        <a href="/messages/{{ user.id }}">Messages</a>
-                        <a href="/profile/{{ user.id }}">Profile</a>
-                        <a href="/logout">Sign Out</a>
-                    </div>
-                </div>
-            </nav>
-            <h1 class="wel">{{ user.alias }}!</h1>
-            <h2 class = "wel">Welcome to your local collaboration community.</h2>
-            <h3 class="wel">below is a quick 3 question survey designed to calibrate your experience here</h3>
-        </header>
-        <div class ="multiform">
-            <form id="int_user" action="/calibrate/{{ user.id }}" method="post">
-                <div class="catagory">
-                    <p>What kinds of projects interest you?</p>
-                    <p class="form_space"></p>
-                    <div class="input_list">
-                        {% for interest in interests: %}
-                        <p>
-                            <input type="checkbox" name="interest_id" value="{{ interest.id }}">
-                            <label for="html">{{ interest.interest }}</label><br>
-                        </p>
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="catagory">
-                    <p>Do you have any special skills you'd like share with the community??</p>
-                    <p class="form_space"></p>
-                    <div class="input_list">
-                        {% for skill in skills: %}
-                        <p>
-                            <input type="checkbox" name="skill_id" value="{{ skill.id }}">
-                            <label for="html">{{ skill.skill }}</label><br>
-                        </p>
-                        {% endfor %}
-                    </div>
-                </div>
+<body>
+    <header></header>
+    <main>
+        <section>
+            <h3>Interests:</h3>
+            <form action="/calibrate/interests/{{ user.id }}" method="POST">
+                <label for="interest">What type of projects interest you?</label>
+                <input type="text" list="try" name="interest">
+                <datalist id="try">
+                    {% for int in interests: %}
+                        <option value="{{ int.interest }}"></option>
+                    {% endfor %}
+                </datalist>
+                <button type="submit">add</button>
             </form>
-            <form id="new_i" action="/new/create_interest/{{ user.id }}" method="post">
-                <div class="pals">
-                    <input type="text" placeholder="new interest" name="interest">
-                    <button class="btn" type="submit">create!</button>
-                </div>
-            </form>
-            <form id="new_s" action="/new/create_skill/{{ user.id }}" method="post">
-                <div class="pals">
-                    <input type="text" placeholder="new skill" name="skill">
-                    <button class="btn" type="submit">create!</button>
-                </div>
-            </form>
-        </div>
-    </body>
+            <div class="pals">
+                {% for i in user.interests%}
+                <form action="/remove/interest/{{ i.id }}" method="POST" >
+                    <div class="pals_mid">
+                        <button class="thic subtle_btn_blk" type="submit">X</button>
+                        <p>{{ i.interest }}&nbsp</p>
+                    </div>
+                </form>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+    <footer></footer>
+</body>
+</html>

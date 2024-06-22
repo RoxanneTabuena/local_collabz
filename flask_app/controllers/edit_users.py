@@ -45,10 +45,26 @@ def register():
 @app.route('/new_user/<int:id>')
 def new_user(id):
     user = User.retrieve_via_id(id)
+    user.interests = User.get_interests(id)
     skills = Skill.get_all()
     interests = Interest.get_all()
     return render_template('new_user.html', user=user, skills = skills, interests = interests)
 
+@app.route('/calibrate/interests/<int:id>', methods=['POST'])
+def calibrate_i(id):
+    interest = Interest.get_one(request.form['interest'])
+    if interest == 'interest not found':
+        data = {
+            'interest' : request.form['interest'].lower(),
+            'id' : id,
+        }
+        Interest.create(data)
+        interest = Interest.get_one(request.form['interest'].lower())
+    data = {'user_id' : id,
+            'interest_id' : interest.id}
+    User.add_interest(data)
+    return redirect('/new_user/' + str(id))
+    
 @app.route('/logout')
 def logout():
     session.clear()
@@ -161,6 +177,16 @@ def update_interests(id):
     }
     User.update_score(data)
     return redirect('/edit_profile/' + str(id))
+
+@app.route('/remove/interest/<int:id>', methods = ['POST'])
+def remove_interest(id):
+    user = User.retrieve_via_id(session['user_id'])
+    data = {
+        'user_id' : user.id,
+        'interest_id' : id
+    }
+    User.remove_interest(data)
+    return redirect('/new_user/' + str(user.id))
 
 @app.route('/create_skill/<int:id>', methods=['POST'])
 def create_skill(id):

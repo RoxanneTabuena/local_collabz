@@ -181,6 +181,11 @@ class User:
         return connectToMySQL(cls.DB).query_db(query,data)
 
     @classmethod
+    def remove_interest(cls, data):
+        query = "DELETE FROM user_interests WHERE user_id = %(user_id)s and interest_id = %(interest_id)s;"
+        return connectToMySQL(cls.DB).query_db(query,data)
+
+    @classmethod
     def like_profile(cls, data):
         query = "INSERT INTO profile_likes (liker_id, likee_id) VALUES (%(liker_id)s, %(likee_id)s)"
         return connectToMySQL(cls.DB).query_db(query,data)
