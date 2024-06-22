@@ -142,7 +142,7 @@ class User:
         results = connectToMySQL(cls.DB).query_db(query,data)
         skillset = []
         if len(results) < 1:
-            return 'No_Skillz'
+            return False
         for row in results:
             skill = Skill(row)
             skillset.append(skill)
@@ -159,7 +159,7 @@ class User:
         results = connectToMySQL(cls.DB).query_db(query,data)
         interests = []
         if len(results) < 1:
-            return 'Boring'
+            return False
         for row in results:
             interest = Interest(row)
             interests.append(interest)
@@ -173,6 +173,11 @@ class User:
     @classmethod
     def add_skill(cls, data):
         query = "INSERT INTO user_skillset (user_id, skill_id) VALUES (%(user_id)s, %(skill_id)s)"
+        return connectToMySQL(cls.DB).query_db(query,data)
+    
+    @classmethod
+    def remove_skill(cls, data):
+        query = "DELETE FROM user_skillset WHERE user_id = %(user_id)s and skill_id = %(skill_id)s;"
         return connectToMySQL(cls.DB).query_db(query,data)
 
     @classmethod

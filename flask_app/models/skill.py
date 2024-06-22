@@ -34,6 +34,8 @@ class Skill:
         data = {'skill' : skill}
         query = "SELECT * FROM skills WHERE skill = %(skill)s"
         result = connectToMySQL(cls.DB).query_db(query, data)
+        if len(result) < 1:
+            return False
         return cls(result[0])
 
     @classmethod

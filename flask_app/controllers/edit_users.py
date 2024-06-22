@@ -46,6 +46,7 @@ def register():
 def new_user(id):
     user = User.retrieve_via_id(id)
     user.interests = User.get_interests(id)
+    user.skillset= User.get_skills(id)
     skills = Skill.get_all()
     interests = Interest.get_all()
     return render_template('new_user.html', user=user, skills = skills, interests = interests)
@@ -53,7 +54,7 @@ def new_user(id):
 @app.route('/calibrate/interests/<int:id>', methods=['POST'])
 def calibrate_i(id):
     interest = Interest.get_one(request.form['interest'])
-    if interest == 'interest not found':
+    if not interest:
         data = {
             'interest' : request.form['interest'].lower(),
             'id' : id,
@@ -63,6 +64,21 @@ def calibrate_i(id):
     data = {'user_id' : id,
             'interest_id' : interest.id}
     User.add_interest(data)
+    return redirect('/new_user/' + str(id))
+    
+@app.route('/calibrate/skills/<int:id>', methods=['POST'])
+def calibrate_s(id):
+    skill = Skill.get_one(request.form['skill'])
+    if not skill:
+        data = {
+            'skill' : request.form['skill'].lower(),
+            'id' : id,
+        }
+        Skill.create(data)
+        skill = Skill.get_one(request.form['skill'].lower())
+    data = {'user_id' : id,
+            'skill_id' : skill.id}
+    User.add_skill(data)
     return redirect('/new_user/' + str(id))
     
 @app.route('/logout')
@@ -153,6 +169,16 @@ def update_skills(id):
     }
     User.update_score(data)
     return redirect('/edit_profile/' + str(id))
+
+@app.route('/remove/skill/<int:id>', methods = ['POST'])
+def remove_skill(id):
+    user = User.retrieve_via_id(session['user_id'])
+    data = {
+        'user_id' : user.id,
+        'skill_id' : id
+    }
+    User.remove_skill(data)
+    return redirect('/new_user/' + str(user.id))
 
 @app.route('/update/interests/<int:id>', methods=['POST'])
 def update_interests(id):

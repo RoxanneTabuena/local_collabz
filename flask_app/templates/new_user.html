@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <title>Document</title>
+    <title>LocalCollabz</title>
 </head>
 <body>
     <header></header>
@@ -13,8 +13,8 @@
             <h3>Interests:</h3>
             <form action="/calibrate/interests/{{ user.id }}" method="POST">
                 <label for="interest">What type of projects interest you?</label>
-                <input type="text" list="try" name="interest">
-                <datalist id="try">
+                <input type="text" list="ins" name="interest">
+                <datalist id="ins">
                     {% for int in interests: %}
                         <option value="{{ int.interest }}"></option>
                     {% endfor %}
@@ -22,6 +22,7 @@
                 <button type="submit">add</button>
             </form>
             <div class="pals">
+                {% if user.interests %}
                 {% for i in user.interests%}
                 <form action="/remove/interest/{{ i.id }}" method="POST" >
                     <div class="pals_mid">
@@ -30,6 +31,32 @@
                     </div>
                 </form>
                 {% endfor %}
+                {% endif %}
+            </div>
+        </section>
+        <section>
+            <h3>Skills:</h3>
+            <form action="/calibrate/skills/{{ user.id }}" method="POST">
+                <label for="skill">Do you have any skills you would like to share?</label>
+                <input type="text" list="sks" name="skill">
+                <datalist id="sks">
+                    {% for skl in skills: %}
+                        <option value="{{ skl.skill }}"></option>
+                    {% endfor %}
+                </datalist>
+                <button type="submit">add</button>
+            </form>
+            <div class="pals">
+                {% if user.skillset %}
+                {% for s in user.skillset%}
+                <form action="/remove/skill/{{ s.id }}" method="POST" >
+                    <div class="pals_mid">
+                        <button class="thic subtle_btn_blk" type="submit">X</button>
+                        <p>{{ s.skill }}&nbsp</p>
+                    </div>
+                </form>
+                {% endfor %}
+                {% endif %}
             </div>
         </section>
     </main>
