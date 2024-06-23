@@ -6,6 +6,10 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
+body >* {
+    margin-bottom: 1rem;
+}
+
 p{
     max-width: 667px;
 }
@@ -25,12 +29,11 @@ nav{
     color: white;
     background-color: black;
     justify-content: space-between;
-    padding: .2rem;
 }
 
-#logo{
+nav > *{
     color: white;
-    padding:.5rem
+    padding: .5rem;
 }
 
 .dropbtn {
@@ -271,6 +274,12 @@ select {
 /* end specifics */
 /* formatting classes */
 
+.border {
+    border: solid black 1.5pt;
+    margin: 1rem;
+    padding: 1rem;
+}
+
 .wel {
     font-size: small;
 }
@@ -339,9 +348,18 @@ select {
 
 .center {
     text-align: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+    margin: auto 0;
+}
+
+.pad {
+    padding: 1rem;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 1rem;
+    margin: auto 0;
+    width: 100vw;
 }
 
 .info{
@@ -401,6 +419,9 @@ select {
 }
 .left {
     text-align: left;
+}
+.right {
+    float: right;
 }
 
 .sect{
@@ -625,6 +646,7 @@ input, select, textarea {
 /* specifics */
 @media only screen and (max-width: 480px) and (orientation: portrait) {
     body {
-        height: 600px;
+        height: 100vh;
+        width: 100vw;
     }
 }

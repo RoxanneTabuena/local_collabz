@@ -10,10 +10,25 @@ from flask_app.models.conversation import Conversation
 @app.route('/city_request/<int:id>', methods=['POST'])
 def city_request(id):
     data = {
-        'city' : request.form['city'],
-        'area' : request.form['area'],
-        'creator_id' : id,
+        'city' : request.form['city'].upper(),
+        'area' : request.form['area'].upper(),
+        'id' : id,
     }
     City.request(data)
     flash('request recieved, well add that to the list ASAP')
     return redirect('/edit_profile/'+str(id))
+
+@app.route('/new_city/<int:id>', methods=['POST'])
+def new_city(id):
+    data = {
+        'city' : request.form['city'].upper(),
+        'area' : request.form['area'].upper(),
+        'id' : id,
+    }
+    City.request(data)
+    City.add(data)
+    city = City.get_by_name(data)
+    print(city.id)
+    data['city_id'] = city.id
+    User.add_city(data)
+    return redirect('/new_user/'+str(id))

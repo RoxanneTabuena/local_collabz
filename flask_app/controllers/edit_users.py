@@ -47,9 +47,11 @@ def new_user(id):
     user = User.retrieve_via_id(id)
     user.interests = User.get_interests(id)
     user.skillset= User.get_skills(id)
+    user.location = City.get_city(user.city_id)
     skills = Skill.get_all()
     interests = Interest.get_all()
-    return render_template('new_user.html', user=user, skills = skills, interests = interests)
+    locations = City.get_all()
+    return render_template('new_user.html', user=user, skills = skills, interests = interests, locations = locations)
 
 @app.route('/calibrate/interests/<int:id>', methods=['POST'])
 def calibrate_i(id):
@@ -79,6 +81,13 @@ def calibrate_s(id):
     data = {'user_id' : id,
             'skill_id' : skill.id}
     User.add_skill(data)
+    return redirect('/new_user/' + str(id))
+
+@app.route('/calibrate/location/<int:id>', methods=['POST'])
+def calibrate_l(id):
+    data = {'id' : id,
+            'city_id' : request.form['city_id']}
+    User.add_city(data)
     return redirect('/new_user/' + str(id))
     
 @app.route('/logout')
@@ -119,12 +128,12 @@ def edit_profile(id):
             role.skillset = Skill.get_role_skillset(role.id)
     skills = Skill.get_all()
     has_skills = []
-    if user.skillset != 'No_Skillz':
+    if user.skillset:
         for skill in user.skillset:
             has_skills.append(skill.id)
     interests = Interest.get_all()
     has_interests = []
-    if user.interests != 'Boring':
+    if user.interests:
         for interest in user.interests:
             has_interests.append(interest.id)
     cities = City.get_all()

@@ -4,23 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer type="text/javascript"src="{{ url_for('static',filename='js/newbie_script.js')}}"></script>
     <title>LocalCollabz</title>
 </head>
 <body>
-    <header></header>
-    <main>
+    <header class="center">
+        <nav>
+            <h3>Local Collabz</h3>
+            <a href="/logout">Log Out</a>
+        </nav>
+        <div class="pad">
+            <h2>Welcome {{ user.alias }}!</h2>
+            <h4>The magic behind getting big things done is a team united by a common goal and 
+                balanced with complementary skills. To help you find that team, we sort projects 
+                posted on our site by interests, skills, and proximity. 
+            </h4>
+        </div>
+    </header>
+    <main class="border">
+        <h1 class="center">Mini Survey</h1>
         <section>
-            <h3>Interests:</h3>
-            <form action="/calibrate/interests/{{ user.id }}" method="POST">
-                <label for="interest">What type of projects interest you?</label>
-                <input type="text" list="ins" name="interest">
-                <datalist id="ins">
-                    {% for int in interests: %}
-                        <option value="{{ int.interest }}"></option>
-                    {% endfor %}
-                </datalist>
-                <button type="submit">add</button>
-            </form>
+            <h2>Interests:</h2>
             <div class="pals">
                 {% if user.interests %}
                 {% for i in user.interests%}
@@ -33,19 +37,23 @@
                 {% endfor %}
                 {% endif %}
             </div>
+            <form action="/calibrate/interests/{{ user.id }}" method="POST">
+                {% if not user.interests: %}
+                <label for="interest">What type of projects should we collect for you?</label>
+                {% endif %}
+                <div class="pals_mid">
+                    <input type="text" list="ins" name="interest" placeholder="add interest">
+                    <datalist id="ins">
+                        {% for int in interests: %}
+                        <option value="{{ int.interest }}"></option>
+                        {% endfor %}
+                    </datalist>
+                    <button type="submit" class="btn">add</button>
+                </div>
+            </form>
         </section>
         <section>
-            <h3>Skills:</h3>
-            <form action="/calibrate/skills/{{ user.id }}" method="POST">
-                <label for="skill">Do you have any skills you would like to share?</label>
-                <input type="text" list="sks" name="skill">
-                <datalist id="sks">
-                    {% for skl in skills: %}
-                        <option value="{{ skl.skill }}"></option>
-                    {% endfor %}
-                </datalist>
-                <button type="submit">add</button>
-            </form>
+            <h2>Skills:</h2>
             <div class="pals">
                 {% if user.skillset %}
                 {% for s in user.skillset%}
@@ -58,8 +66,56 @@
                 {% endfor %}
                 {% endif %}
             </div>
+            <form action="/calibrate/skills/{{ user.id }}" method="POST">
+                {% if not user.skillset %}
+                <label for="skill">What skills would you like to bring to the community?</label>
+                {% endif %}
+                <div class="pals_mid">
+                    <input type="text" list="sks" name="skill" placeholder="add skill">
+                    <datalist id="sks">
+                        {% for skl in skills: %}
+                        <option value="{{ skl.skill }}"></option>
+                        {% endfor %}
+                    </datalist>
+                    <button type="submit" class="btn">add</button>
+                </div>
+            </form>
         </section>
+        <section>
+            <div class="pals_mid">
+                <h2>Location:</h2>
+                {% if user.location %}
+                <p>{{ user.location.city }}, {{ user.location.area }}</p>
+                {% else %}
+            </div>
+            <form action="/calibrate/location/{{ user.id }}" method="POST">
+                <label for="location">What city are you based out of?</label><br />
+                <select id="locs" name="city_id">
+                    {% for loc in locations: %}
+                        <option value="{{ loc.id }}">{{ loc.city }}, {{ loc.area }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn">add</button>
+            </form>
+            <p id="+city" onclick="display()">+ add your city to our directory</p>
+                {% endif %}
+        </section>
+        <section id="new_city">
+            <h2>New City:</h2>
+            <form action="/new_city/{{ user.id }}" method="post">
+                <input type="text" name="city" placeholder="city name">
+                <div class="pals_mid">
+                    <input type="text" name="area" placeholder="state">
+                    <button type="submit" class="btn">add</button>
+                </div>
+                <p>(please enter country if not in US)</p>
+            </form>
+        </div>
+        </section>
+        <h4>This information can be edited or added to at any time under Edit Profile:)</h4>
     </main>
-    <footer></footer>
+    <footer class="center bottom">
+        <a href="/feed/{{ user.id }}" class="btn">Onto Your Feed!</a>
+    </footer>
 </body>
 </html>

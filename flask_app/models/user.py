@@ -243,7 +243,7 @@ class User:
 
     @classmethod
     def add_city(cls, data):
-        query = "UPDATE users SET city_id = %(city_id) WHERE id = %(id)s"
+        query = "UPDATE users SET city_id = %(city_id)s WHERE id = %(id)s"
         return connectToMySQL(cls.DB).query_db(query,data)
 
     @classmethod

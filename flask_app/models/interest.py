@@ -34,7 +34,7 @@ class Interest:
         query = "SELECT * FROM interests WHERE interest = %(interest)s"
         result = connectToMySQL(cls.DB).query_db(query, data)
         if len(result) <1:
-            return 'interest not found'
+            return False
         return cls(result[0])
 
     @classmethod
